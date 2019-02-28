@@ -7,19 +7,8 @@ import config from './config'
 import registerServiceWorker from './registerServiceWorker'
 import './index.css'
 import { RestLink } from 'apollo-link-rest'
-import { ApolloProvider, gql } from 'react-apollo'
+import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
-const client = new ApolloClient({
-  link: config.apiGateway.URL
-})
-
-const query = gql`
-  query luke {
-    person @rest(type: "Person", path: "people/1/") {
-      name
-    }
-  }
-`
 
 Amplify.configure({
   Auth: {
@@ -41,11 +30,10 @@ Amplify.configure({
 })
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
     <Router>
       <App />
     </Router>
-  </ApolloProvider>,
+ ,
   document.getElementById('root')
 )
 registerServiceWorker()
