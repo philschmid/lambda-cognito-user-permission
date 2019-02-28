@@ -18,6 +18,7 @@ export default class Signup extends Component {
       isLoading: false,
       email: '',
       password: '',
+      name: '',
       confirmPassword: '',
       confirmationCode: '',
       newUser: null
@@ -28,6 +29,7 @@ export default class Signup extends Component {
     return (
       this.state.email.length > 0 &&
       this.state.password.length > 0 &&
+      this.state.name.length > 0 &&
       this.state.password === this.state.confirmPassword
     )
   }
@@ -50,7 +52,8 @@ export default class Signup extends Component {
     try {
       const newUser = await Auth.signUp({
         username: this.state.email,
-        password: this.state.password
+        password: this.state.password,
+        attributes: { email: this.state.email, name: this.state.name }
       })
       this.setState({
         newUser
@@ -114,6 +117,15 @@ export default class Signup extends Component {
             autoFocus
             type="email"
             value={this.state.email}
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup controlId="name" bsSize="large">
+          <ControlLabel>Name</ControlLabel>
+          <FormControl
+            autoFocus
+            type="name"
+            value={this.state.name}
             onChange={this.handleChange}
           />
         </FormGroup>
