@@ -19,6 +19,7 @@ export default class Signup extends Component {
       email: '',
       password: '',
       name: '',
+      workspace: '',
       confirmPassword: '',
       confirmationCode: '',
       newUser: null
@@ -30,6 +31,7 @@ export default class Signup extends Component {
       this.state.email.length > 0 &&
       this.state.password.length > 0 &&
       this.state.name.length > 0 &&
+      this.state.workspace.length > 0 &&
       this.state.password === this.state.confirmPassword
     )
   }
@@ -53,7 +55,11 @@ export default class Signup extends Component {
       const newUser = await Auth.signUp({
         username: this.state.email,
         password: this.state.password,
-        attributes: { email: this.state.email, name: this.state.name }
+        attributes: {
+          email: this.state.email,
+          name: this.state.name,
+          'custom:workspace': this.state.workspace
+        }
       })
       this.setState({
         newUser
@@ -126,6 +132,15 @@ export default class Signup extends Component {
             autoFocus
             type="name"
             value={this.state.name}
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup controlId="workspace" bsSize="large">
+          <ControlLabel>Workspace</ControlLabel>
+          <FormControl
+            autoFocus
+            type="workspace"
+            value={this.state.workspace}
             onChange={this.handleChange}
           />
         </FormGroup>
