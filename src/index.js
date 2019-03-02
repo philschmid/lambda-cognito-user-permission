@@ -6,9 +6,6 @@ import App from './App'
 import config from './config'
 import registerServiceWorker from './registerServiceWorker'
 import './index.css'
-import { RestLink } from 'apollo-link-rest'
-import { ApolloProvider } from 'react-apollo'
-import ApolloClient from 'apollo-boost'
 
 Amplify.configure({
   Auth: {

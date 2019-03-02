@@ -87,9 +87,7 @@ export default class Home extends Component {
     return (
       <div className="test">
         <PageHeader>Test API call</PageHeader>
-        <ListGroup>
-          {!this.state.isLoading && this.renderTestAPI(this.state.testApiCall)}
-        </ListGroup>
+        <ListGroup>{!this.state.isLoading}</ListGroup>
         <div />
         <button
           onClick={async () => {
