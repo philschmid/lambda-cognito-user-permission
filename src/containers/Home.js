@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { PageHeader, ListGroup } from 'react-bootstrap'
 import { API } from 'aws-amplify'
 import { jwtVerify } from '../verifyJWT'
+import { Auth } from 'aws-amplify'
+
 import './Home.css'
 
 export default class Home extends Component {
@@ -30,31 +32,37 @@ export default class Home extends Component {
     this.setState({ isLoading: false })
   }
 
-  testApiCall(_path) {
-    // Auth.currentCredentials(credentials => {
-    //   const tokens = Auth.essentialCredentials(credentials)
-    //   console.log(tokens)
-    // })
+  async testApiCall(_path) {
+    const aToken = await Auth.currentAuthenticatedUser().then(
+      ({
+        signInUserSession: {
+          idToken: { jwtToken }
+        }
+      }) => {
+        return jwtToken
+      }
+    )
+
     let apiName = 'testApiCall'
     let path = _path
     let myInit = {
       // OPTIONAL
       headers: {
         // 'content-type': 'application/json',
-        Authorization:
-          'eyJraWQiOiJySzVGSEd0WjdPWkJYN1Y2VEdlSzhHQUg5K2ZPTGNqdzVGSXYza09SWHd3PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyNzU3NDUyZi00MGU3LTQ1ZDItYjY1MS1iMzc4YTlhZmVmZGQiLCJhdWQiOiIxZHRsaDB0Y24wODlxM284M2g1YzUybWl2ZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6IjBjZmVkMWM1LTNiNDEtMTFlOS04NmI2LTVmOTgwZDgzMWU0OCIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNTUxMzQ4NjE4LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtY2VudHJhbC0xLmFtYXpvbmF3cy5jb21cL2V1LWNlbnRyYWwtMV91d2Y0QTVNOGEiLCJuYW1lIjoicGhpbGlwcCIsImNvZ25pdG86dXNlcm5hbWUiOiJzY2htaWRwaGlsaXBwMTk5NUBnbWFpbC5jb20iLCJleHAiOjE1NTEzNTIyMTgsImlhdCI6MTU1MTM0ODYxOCwiZW1haWwiOiJzY2htaWRwaGlsaXBwMTk5NUBnbWFpbC5jb20ifQ.blAFm1TlzA5IV3namDNJc5zss-_ulM-bcuWnFqZPfrQ970eJnmD4ak9Wkw9xsCMvoSRxk-bs38pa9rF2f3ZoFJI_6B0RHlluoJHMqO2F2SEFBivvO7LiUaxENOn81eUQP_P1nqpHLgfSJDKAn_6bom0pqxcKCrMs9YXuDGBnqj-EMKxefWUqsojTTIhry7mFUYzEzEAKJzDk0utbgKvy2rm4hZvqEEfmC540s2NLEoDJCOfVw3QPi_0ZjbN9v0V_kxXWBDL6nBbneVq62jLg69ynrTnMHGj8WwlSTBB96JvebyYXM_jhxY_bNKgQ_IpIZBocP4wD_SqopIhiAxTgag'
+        Authorization: aToken
       }, // OPTIONAL
       response: true // OPTIONAL (return the entire Axios response object instead of only response.data)
     }
-
     return API.get(apiName, path, myInit)
       .then(async response => {
+        console.log(JSON.parse(response.data.body))
         if (response.data) {
+          console.log(JSON.parse(response.data.body).token)
           const res = await jwtVerify(JSON.parse(response.data.body).token)
           console.log(res)
-          return res
+          // return res
+          return JSON.parse(response.data.body)
         }
-        return response
       })
       .catch(error => {
         console.log(error.response)
@@ -92,12 +100,13 @@ export default class Home extends Component {
         <button
           onClick={async () => {
             const x = await this.testApiCall('/test')
-            this.setState({ message: x })
+            this.setState({ message: x.message })
           }}
         >
           Lambda function
         </button>
         <br />
+        <div>{this.state.message}</div>
       </div>
     )
   }

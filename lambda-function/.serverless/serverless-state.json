@@ -118,7 +118,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sls-cognito-backend2/dev/1551349967071-2019-02-28T10:32:47.071Z/sls-cognito-backend2.zip"
+                "S3Key": "serverless/sls-cognito-backend2/dev/1551608545869-2019-03-03T10:22:25.869Z/sls-cognito-backend2.zip"
               },
               "FunctionName": "sls-cognito-backend2-dev-hello2",
               "Handler": "handler.hello",
@@ -154,7 +154,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sls-cognito-backend2/dev/1551349967071-2019-02-28T10:32:47.071Z/sls-cognito-backend2.zip"
+                "S3Key": "serverless/sls-cognito-backend2/dev/1551608545869-2019-03-03T10:22:25.869Z/sls-cognito-backend2.zip"
               },
               "FunctionName": "sls-cognito-backend2-dev-ohne2",
               "Handler": "handler.hello",
@@ -332,7 +332,7 @@
               "ApiKeyRequired": false,
               "AuthorizationType": "COGNITO_USER_POOLS",
               "AuthorizerId": {
-                "Ref": "1Underscoreuwf4A5M8aApiGatewayAuthorizer"
+                "Ref": "1UnderscoreDWU7RfBAQApiGatewayAuthorizer"
               },
               "Integration": {
                 "IntegrationHttpMethod": "POST",
@@ -362,8 +362,8 @@
                 },
                 "PassthroughBehavior": "NEVER",
                 "RequestTemplates": {
-                  "application/json": "\n    #set( $body = $input.json(\"$\") )\n\n    \n  #define( $loop )\n    {\n    #foreach($key in $map.keySet())\n        #set( $k = $util.escapeJavaScript($key) )\n        #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll(\"\\\\'\", \"'\") )\n        \"$k\":\n          \"$v\"\n          #if( $foreach.hasNext ) , #end\n    #end\n    }\n  #end\n\n  {\n    \"body\": $body,\n    \"method\": \"$context.httpMethod\",\n    \"principalId\": \"$context.authorizer.principalId\",\n    \"stage\": \"$context.stage\",\n\n    \"cognitoPoolClaims\" : {\n       \"email\": \"$context.authorizer.claims.email\",\n       \"sub\": \"$context.authorizer.claims.sub\"\n    },\n\n    #set( $map = $context.authorizer )\n    \"enhancedAuthContext\": $loop,\n\n    #set( $map = $input.params().header )\n    \"headers\": $loop,\n\n    #set( $map = $input.params().querystring )\n    \"query\": $loop,\n\n    #set( $map = $input.params().path )\n    \"path\": $loop,\n\n    #set( $map = $context.identity )\n    \"identity\": $loop,\n\n    #set( $map = $stageVariables )\n    \"stageVariables\": $loop\n  }\n\n  ",
-                  "application/x-www-form-urlencoded": "\n    #define( $body )\n      {\n      #foreach( $token in $input.path('$').split('&') )\n        #set( $keyVal = $token.split('=') )\n        #set( $keyValSize = $keyVal.size() )\n        #if( $keyValSize >= 1 )\n          #set( $key = $util.escapeJavaScript($util.urlDecode($keyVal[0])) )\n          #if( $keyValSize >= 2 )\n            #set($val = $util.escapeJavaScript($util.urlDecode($keyVal[1])).replaceAll(\"\\\\'\",\"'\"))\n          #else\n            #set( $val = '' )\n          #end\n          \"$key\": \"$val\"#if($foreach.hasNext),#end\n        #end\n      #end\n      }\n    #end\n\n    \n  #define( $loop )\n    {\n    #foreach($key in $map.keySet())\n        #set( $k = $util.escapeJavaScript($key) )\n        #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll(\"\\\\'\", \"'\") )\n        \"$k\":\n          \"$v\"\n          #if( $foreach.hasNext ) , #end\n    #end\n    }\n  #end\n\n  {\n    \"body\": $body,\n    \"method\": \"$context.httpMethod\",\n    \"principalId\": \"$context.authorizer.principalId\",\n    \"stage\": \"$context.stage\",\n\n    \"cognitoPoolClaims\" : {\n       \"email\": \"$context.authorizer.claims.email\",\n       \"sub\": \"$context.authorizer.claims.sub\"\n    },\n\n    #set( $map = $context.authorizer )\n    \"enhancedAuthContext\": $loop,\n\n    #set( $map = $input.params().header )\n    \"headers\": $loop,\n\n    #set( $map = $input.params().querystring )\n    \"query\": $loop,\n\n    #set( $map = $input.params().path )\n    \"path\": $loop,\n\n    #set( $map = $context.identity )\n    \"identity\": $loop,\n\n    #set( $map = $stageVariables )\n    \"stageVariables\": $loop\n  }\n\n  "
+                  "application/json": "\n    #set( $body = $input.json(\"$\") )\n\n    \n  #define( $loop )\n    {\n    #foreach($key in $map.keySet())\n        #set( $k = $util.escapeJavaScript($key) )\n        #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll(\"\\\\'\", \"'\") )\n        \"$k\":\n          \"$v\"\n          #if( $foreach.hasNext ) , #end\n    #end\n    }\n  #end\n\n  {\n    \"body\": $body,\n    \"method\": \"$context.httpMethod\",\n    \"principalId\": \"$context.authorizer.principalId\",\n    \"stage\": \"$context.stage\",\n\n    \"cognitoPoolClaims\" : {\n       \n       \"sub\": \"$context.authorizer.claims.sub\"\n    },\n\n    #set( $map = $context.authorizer )\n    \"enhancedAuthContext\": $loop,\n\n    #set( $map = $input.params().header )\n    \"headers\": $loop,\n\n    #set( $map = $input.params().querystring )\n    \"query\": $loop,\n\n    #set( $map = $input.params().path )\n    \"path\": $loop,\n\n    #set( $map = $context.identity )\n    \"identity\": $loop,\n\n    #set( $map = $stageVariables )\n    \"stageVariables\": $loop\n  }\n\n  ",
+                  "application/x-www-form-urlencoded": "\n    #define( $body )\n      {\n      #foreach( $token in $input.path('$').split('&') )\n        #set( $keyVal = $token.split('=') )\n        #set( $keyValSize = $keyVal.size() )\n        #if( $keyValSize >= 1 )\n          #set( $key = $util.escapeJavaScript($util.urlDecode($keyVal[0])) )\n          #if( $keyValSize >= 2 )\n            #set($val = $util.escapeJavaScript($util.urlDecode($keyVal[1])).replaceAll(\"\\\\'\",\"'\"))\n          #else\n            #set( $val = '' )\n          #end\n          \"$key\": \"$val\"#if($foreach.hasNext),#end\n        #end\n      #end\n      }\n    #end\n\n    \n  #define( $loop )\n    {\n    #foreach($key in $map.keySet())\n        #set( $k = $util.escapeJavaScript($key) )\n        #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll(\"\\\\'\", \"'\") )\n        \"$k\":\n          \"$v\"\n          #if( $foreach.hasNext ) , #end\n    #end\n    }\n  #end\n\n  {\n    \"body\": $body,\n    \"method\": \"$context.httpMethod\",\n    \"principalId\": \"$context.authorizer.principalId\",\n    \"stage\": \"$context.stage\",\n\n    \"cognitoPoolClaims\" : {\n       \n       \"sub\": \"$context.authorizer.claims.sub\"\n    },\n\n    #set( $map = $context.authorizer )\n    \"enhancedAuthContext\": $loop,\n\n    #set( $map = $input.params().header )\n    \"headers\": $loop,\n\n    #set( $map = $input.params().querystring )\n    \"query\": $loop,\n\n    #set( $map = $input.params().path )\n    \"path\": $loop,\n\n    #set( $map = $context.identity )\n    \"identity\": $loop,\n\n    #set( $map = $stageVariables )\n    \"stageVariables\": $loop\n  }\n\n  "
                 },
                 "IntegrationResponses": [
                   {
@@ -506,7 +506,7 @@
                 }
               ]
             },
-            "DependsOn": "1Underscoreuwf4A5M8aApiGatewayAuthorizer"
+            "DependsOn": "1UnderscoreDWU7RfBAQApiGatewayAuthorizer"
           },
           "ApiGatewayMethodHello2Get": {
             "Type": "AWS::ApiGateway::Method",
@@ -551,22 +551,22 @@
               "MethodResponses": []
             }
           },
-          "1Underscoreuwf4A5M8aApiGatewayAuthorizer": {
+          "1UnderscoreDWU7RfBAQApiGatewayAuthorizer": {
             "Type": "AWS::ApiGateway::Authorizer",
             "Properties": {
               "AuthorizerResultTtlInSeconds": 300,
               "IdentitySource": "method.request.header.Authorization",
-              "Name": "1_uwf4A5M8a",
+              "Name": "1_DWU7RfBAQ",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               },
               "Type": "COGNITO_USER_POOLS",
               "ProviderARNs": [
-                "arn:aws:cognito-idp:eu-central-1:891511646143:userpool/eu-central-1_uwf4A5M8a"
+                "arn:aws:cognito-idp:eu-central-1:891511646143:userpool/eu-central-1_DWU7RfBAQ"
               ]
             }
           },
-          "ApiGatewayDeployment1551349967083": {
+          "ApiGatewayDeployment1551608545882": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -674,20 +674,6 @@
                 ]
               }
             }
-          },
-          "GatewayResponse": {
-            "Type": "AWS::ApiGateway::GatewayResponse",
-            "Properties": {
-              "ResponseParameters": {
-                "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
-                "gatewayresponse.header.Access-Control-Allow-Headers": "'*'"
-              },
-              "ResponseType": "EXPIRED_TOKEN",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "StatusCode": "401"
-            }
           }
         },
         "Outputs": {
@@ -747,6 +733,9 @@
       },
       "vpc": {}
     },
+    "custom": {
+      "UserPoolId": "arn:aws:cognito-idp:eu-central-1:891511646143:userpool/eu-central-1_DWU7RfBAQ"
+    },
     "pluginsData": {},
     "functions": {
       "hello2": {
@@ -777,13 +766,11 @@
               "integration": "AWS",
               "method": "get",
               "authorizer": {
-                "name": "1_uwf4A5M8a",
-                "arn": "arn:aws:cognito-idp:eu-central-1:891511646143:userpool/eu-central-1_uwf4A5M8a",
+                "name": "1_DWU7RfBAQ",
+                "arn": "arn:aws:cognito-idp:eu-central-1:891511646143:userpool/eu-central-1_DWU7RfBAQ",
                 "resultTtlInSeconds": 300,
                 "identitySource": "method.request.header.Authorization",
-                "claims": [
-                  "email"
-                ]
+                "claims": []
               },
               "request": {
                 "passThrough": "NEVER"
@@ -867,30 +854,11 @@
         "vpc": {}
       }
     },
-    "resources": {
-      "Resources": {
-        "GatewayResponse": {
-          "Type": "AWS::ApiGateway::GatewayResponse",
-          "Properties": {
-            "ResponseParameters": {
-              "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
-              "gatewayresponse.header.Access-Control-Allow-Headers": "'*'"
-            },
-            "ResponseType": "EXPIRED_TOKEN",
-            "RestApiId": {
-              "Ref": "ApiGatewayRestApi"
-            },
-            "StatusCode": "401"
-          }
-        }
-      },
-      "Outputs": {}
-    },
     "layers": {},
     "artifact": "/Users/philipp/Projects/react-tools/web-client-cognito/lambda-function/.serverless/sls-cognito-backend2.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/sls-cognito-backend2/dev/1551349967071-2019-02-28T10:32:47.071Z",
+    "artifactDirectoryName": "serverless/sls-cognito-backend2/dev/1551608545869-2019-03-03T10:22:25.869Z",
     "artifact": "sls-cognito-backend2.zip"
   }
 }
