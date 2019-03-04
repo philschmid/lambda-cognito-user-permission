@@ -114,7 +114,7 @@ export default class Home extends Component {
             this.setState({ message: x.message })
           }}
         >
-          Lambda ohne Auth function
+          Lambda mit IAM and accessToken
         </button>
       </div>
     )
