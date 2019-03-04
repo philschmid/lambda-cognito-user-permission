@@ -30,17 +30,6 @@ functions:
           method: get
           authorizer:
             arn: ${self:custom.UserPoolId}
-      # - http:
-      #     path: hello
-      #     method: get
-      #     # authorizer: aws_iam
-      #     integration: lambda
-      #     authorizer:
-      #       arn: arn:aws:cognito-idp:eu-central-1:891511646143:userpool/eu-central-1_uwf4A5M8a
-      #       # claims:
-      #       #   - email
-      #       #   - nickname
-      #     cors: true
   ohne2:
     handler: handler.hello
     events:
@@ -48,7 +37,14 @@ functions:
           path: hello2
           method: get
           cors: true
-          # # authorizer: aws_iam
+  iam2:
+    handler: handler.hello
+    events:
+      - http:
+          path: iamhello
+          method: get
+          cors: true
+          authorizer: aws_iam
           # integration: lambda
           # authorizer:
           #   arn: arn:aws:cognito-idp:eu-central-1:891511646143:userpool/eu-central-1_za0Pd79ZH
@@ -103,74 +99,74 @@ functions:
 #             Fn::GetAtt: [CognitoAuthRole, Arn]
 #           unauthenticated:
 #             Fn::GetAtt: [CognitoUnauthRole, Arn]
-    #
-    #
-    # Erstellt Rolen
-    #
-    #
-    #
-    # CognitoAuthRole:
-    #   Type: AWS::IAM::Role
-    #   Properties:
-    #     RoleName: appAuthRole
-    #     Path: /
-    #     AssumeRolePolicyDocument:
-    #       Version: "2012-10-17"
-    #       Statement:
-    #         - Effect: "Allow"
-    #           Principal:
-    #             Federated: "cognito-identity.amazonaws.com"
-    #           Action:
-    #             - "sts:AssumeRoleWithWebIdentity"
-    #           Condition:
-    #             StringEquals:
-    #               "cognito-identity.amazonaws.com:aud":
-    #                 Ref: CognitoIdentityPool
-    #             "ForAnyValue:StringLike":
-    #               "cognito-identity.amazonaws.com:amr": authenticated
-    #     Policies:
-    #       - PolicyName: "CognitoAuthorizedPolicy"
-    #         PolicyDocument:
-    #           Version: "2012-10-17"
-    #           Statement:
-    #             - Effect: "Allow"
-    #               Action:
-    #                 - "mobileanalytics:PutEvents"
-    #                 - "cognito-sync:*"
-    #                 - "cognito-identity:*"
-    #               Resource: "*"
-    #             - Effect: "Allow"
-    #               Action:
-    #                 - "execute-api:Invoke"
-    #               Resource: "*"
-    # # Braucht man nur beim ersten Mal erstellt die Role
-    # CognitoUnauthRole:
-    #   Type: AWS::IAM::Role
-    #   Properties:
-    #     RoleName: appUnauthRole
-    #     Path: /
-    #     AssumeRolePolicyDocument:
-    #       Version: "2012-10-17"
-    #       Statement:
-    #         - Effect: "Allow"
-    #           Principal:
-    #             Federated: "cognito-identity.amazonaws.com"
-    #           Action:
-    #             - "sts:AssumeRoleWithWebIdentity"
-    #           Condition:
-    #             StringEquals:
-    #               "cognito-identity.amazonaws.com:aud":
-    #                 Ref: CognitoIdentityPool
-    #             "ForAnyValue:StringLike":
-    #               "cognito-identity.amazonaws.com:amr": unauthenticated
-    #     Policies:
-    #       - PolicyName: "CognitoUnauthorizedPolicy"
-    #         PolicyDocument:
-    #           Version: "2012-10-17"
-    #           Statement:
-    #             - Effect: "Allow"
-    #               Action:
-    #                 - "mobileanalytics:PutEvents"
-    #                 - "cognito-sync:*"
-    #                 - "cognito-identity:*"
-    #               Resource: "*"
+#
+#
+# Erstellt Rolen
+#
+#
+#
+# CognitoAuthRole:
+#   Type: AWS::IAM::Role
+#   Properties:
+#     RoleName: appAuthRole
+#     Path: /
+#     AssumeRolePolicyDocument:
+#       Version: "2012-10-17"
+#       Statement:
+#         - Effect: "Allow"
+#           Principal:
+#             Federated: "cognito-identity.amazonaws.com"
+#           Action:
+#             - "sts:AssumeRoleWithWebIdentity"
+#           Condition:
+#             StringEquals:
+#               "cognito-identity.amazonaws.com:aud":
+#                 Ref: CognitoIdentityPool
+#             "ForAnyValue:StringLike":
+#               "cognito-identity.amazonaws.com:amr": authenticated
+#     Policies:
+#       - PolicyName: "CognitoAuthorizedPolicy"
+#         PolicyDocument:
+#           Version: "2012-10-17"
+#           Statement:
+#             - Effect: "Allow"
+#               Action:
+#                 - "mobileanalytics:PutEvents"
+#                 - "cognito-sync:*"
+#                 - "cognito-identity:*"
+#               Resource: "*"
+#             - Effect: "Allow"
+#               Action:
+#                 - "execute-api:Invoke"
+#               Resource: "*"
+# # Braucht man nur beim ersten Mal erstellt die Role
+# CognitoUnauthRole:
+#   Type: AWS::IAM::Role
+#   Properties:
+#     RoleName: appUnauthRole
+#     Path: /
+#     AssumeRolePolicyDocument:
+#       Version: "2012-10-17"
+#       Statement:
+#         - Effect: "Allow"
+#           Principal:
+#             Federated: "cognito-identity.amazonaws.com"
+#           Action:
+#             - "sts:AssumeRoleWithWebIdentity"
+#           Condition:
+#             StringEquals:
+#               "cognito-identity.amazonaws.com:aud":
+#                 Ref: CognitoIdentityPool
+#             "ForAnyValue:StringLike":
+#               "cognito-identity.amazonaws.com:amr": unauthenticated
+#     Policies:
+#       - PolicyName: "CognitoUnauthorizedPolicy"
+#         PolicyDocument:
+#           Version: "2012-10-17"
+#           Statement:
+#             - Effect: "Allow"
+#               Action:
+#                 - "mobileanalytics:PutEvents"
+#                 - "cognito-sync:*"
+#                 - "cognito-identity:*"
+#               Resource: "*"

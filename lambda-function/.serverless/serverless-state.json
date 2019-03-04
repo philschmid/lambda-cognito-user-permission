@@ -31,6 +31,12 @@
               "LogGroupName": "/aws/lambda/sls-cognito-backend2-dev-ohne2"
             }
           },
+          "Iam2LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sls-cognito-backend2-dev-iam2"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -76,6 +82,9 @@
                           },
                           {
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sls-cognito-backend2-dev-ohne2:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sls-cognito-backend2-dev-iam2:*"
                           }
                         ]
                       },
@@ -90,6 +99,9 @@
                           },
                           {
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sls-cognito-backend2-dev-ohne2:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sls-cognito-backend2-dev-iam2:*:*"
                           }
                         ]
                       }
@@ -118,7 +130,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sls-cognito-backend2/dev/1551608545869-2019-03-03T10:22:25.869Z/sls-cognito-backend2.zip"
+                "S3Key": "serverless/sls-cognito-backend2/dev/1551706613662-2019-03-04T13:36:53.662Z/sls-cognito-backend2.zip"
               },
               "FunctionName": "sls-cognito-backend2-dev-hello2",
               "Handler": "handler.hello",
@@ -154,7 +166,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sls-cognito-backend2/dev/1551608545869-2019-03-03T10:22:25.869Z/sls-cognito-backend2.zip"
+                "S3Key": "serverless/sls-cognito-backend2/dev/1551706613662-2019-03-04T13:36:53.662Z/sls-cognito-backend2.zip"
               },
               "FunctionName": "sls-cognito-backend2-dev-ohne2",
               "Handler": "handler.hello",
@@ -179,6 +191,42 @@
             "Properties": {
               "FunctionName": {
                 "Ref": "Ohne2LambdaFunction"
+              },
+              "CodeSha256": "YP0eI6IrbVfOBX/riyOYho6AzTwDGi/igIsPkcgw9RU="
+            }
+          },
+          "Iam2LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/sls-cognito-backend2/dev/1551706613662-2019-03-04T13:36:53.662Z/sls-cognito-backend2.zip"
+              },
+              "FunctionName": "sls-cognito-backend2-dev-iam2",
+              "Handler": "handler.hello",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs8.10",
+              "Timeout": 6
+            },
+            "DependsOn": [
+              "Iam2LogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "Iam2LambdaVersiond3ue6rc5EnSv1643CDmyCsO5ISiJjodVW26gzBLg8": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "Iam2LambdaFunction"
               },
               "CodeSha256": "YP0eI6IrbVfOBX/riyOYho6AzTwDGi/igIsPkcgw9RU="
             }
@@ -219,6 +267,21 @@
                 ]
               },
               "PathPart": "hello2",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceIamhello": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "iamhello",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -312,6 +375,53 @@
               },
               "ResourceId": {
                 "Ref": "ApiGatewayResourceHello2"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodIamhelloOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceIamhello"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
@@ -551,6 +661,49 @@
               "MethodResponses": []
             }
           },
+          "ApiGatewayMethodIamhelloGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceIamhello"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "AWS_IAM",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "Iam2LambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
           "1UnderscoreDWU7RfBAQApiGatewayAuthorizer": {
             "Type": "AWS::ApiGateway::Authorizer",
             "Properties": {
@@ -566,7 +719,7 @@
               ]
             }
           },
-          "ApiGatewayDeployment1551608545882": {
+          "ApiGatewayDeployment1551706613675": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -577,8 +730,10 @@
             "DependsOn": [
               "ApiGatewayMethodTestOptions",
               "ApiGatewayMethodHello2Options",
+              "ApiGatewayMethodIamhelloOptions",
               "ApiGatewayMethodTestGet",
-              "ApiGatewayMethodHello2Get"
+              "ApiGatewayMethodHello2Get",
+              "ApiGatewayMethodIamhelloGet"
             ]
           },
           "Hello2LambdaPermissionApiGateway": {
@@ -674,6 +829,53 @@
                 ]
               }
             }
+          },
+          "Iam2LambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "Iam2LambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "apigateway.",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -692,6 +894,12 @@
             "Description": "Current Lambda function version",
             "Value": {
               "Ref": "Ohne2LambdaVersionGHDG2qfqk6FUUIKwUCkWZgZ2mIDfyLWFgYDa1sHkeZg"
+            }
+          },
+          "Iam2LambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "Iam2LambdaVersiond3ue6rc5EnSv1643CDmyCsO5ISiJjodVW26gzBLg8"
             }
           },
           "ServiceEndpoint": {
@@ -852,13 +1060,54 @@
         "timeout": 6,
         "runtime": "nodejs8.10",
         "vpc": {}
+      },
+      "iam2": {
+        "handler": "handler.hello",
+        "events": [
+          {
+            "http": {
+              "path": "iamhello",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "authorizer": {
+                "type": "AWS_IAM",
+                "identitySource": "method.request.header.Authorization"
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "sls-cognito-backend2-dev-iam2",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs8.10",
+        "vpc": {}
       }
     },
     "layers": {},
     "artifact": "/Users/philipp/Projects/react-tools/web-client-cognito/lambda-function/.serverless/sls-cognito-backend2.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/sls-cognito-backend2/dev/1551608545869-2019-03-03T10:22:25.869Z",
+    "artifactDirectoryName": "serverless/sls-cognito-backend2/dev/1551706613662-2019-03-04T13:36:53.662Z",
     "artifact": "sls-cognito-backend2.zip"
   }
 }

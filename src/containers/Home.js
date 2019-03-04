@@ -79,7 +79,7 @@ export default class Home extends Component {
         <h1>Test web app</h1>
         <button
           onClick={async () => {
-            const x = await this.testPostCallWoCre('/hello2')
+            const x = await this.testPostCallWoCre('/iamhello')
             console.log(x)
             this.setState({ message: x })
           }}
@@ -107,6 +107,15 @@ export default class Home extends Component {
         </button>
         <br />
         <div>{this.state.message}</div>
+        <button
+          onClick={async () => {
+            const x = await this.testPostCallWoCre('/iamhello')
+            console.log(x.message)
+            this.setState({ message: x.message })
+          }}
+        >
+          Lambda ohne Auth function
+        </button>
       </div>
     )
   }
