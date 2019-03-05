@@ -5,7 +5,12 @@ import { Link, withRouter } from 'react-router-dom'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 import Routes from './Routes'
 import { Auth } from 'aws-amplify'
-
+import {
+  CognitoUserPool,
+  CognitoUser,
+  CookieStorage
+} from 'amazon-cognito-identity-js'
+import config from './config'
 import './App.css'
 
 class App extends Component {
@@ -37,8 +42,33 @@ class App extends Component {
   }
 
   handleLogout = async event => {
-    await Auth.signOut()
+    // await Auth.signOut()
+    var poolData = {
+      UserPoolId: config.cognito.USER_POOL_ID, // Your user pool id here
+      ClientId: config.cognito.APP_CLIENT_ID // Your client id here
+    }
+    var cognitoUser = new CognitoUserPool(poolData).getCurrentUser()
+    if (cognitoUser != null) {
+      cognitoUser.getSession(function(err, result) {
+        if (result) {
+          console.log('You are now logged in.')
+          console.log(result.accessToken.payload.device_key)
 
+          cognitoUser.forgetSpecificDevice(
+            result.accessToken.payload.device_key,
+            {
+              onSuccess: function(result) {
+                console.log('call result: ' + result)
+              },
+              onFailure: function(err) {
+                alert(err.message || JSON.stringify(err))
+              }
+            }
+          )
+        }
+      })
+    }
+    // cognitoUser.signOut()
     this.userHasAuthenticated(false)
     this.props.history.push('/login')
   }

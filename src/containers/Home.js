@@ -4,6 +4,7 @@ import { API } from 'aws-amplify'
 import { jwtVerify } from '../verifyJWT'
 import { Auth } from 'aws-amplify'
 
+
 import './Home.css'
 
 export default class Home extends Component {
@@ -69,7 +70,13 @@ export default class Home extends Component {
         throw error
       })
   }
-  testPostCallWoCre(_path) {
+  async testPostCallWoCre(_path) {
+    // await fetch(
+    //   'https://u6lrpyp108.execute-api.eu-central-1.amazonaws.com/dev/iamhello'
+    // ).then(function(response) {
+    //   console.log(response)
+    //   return response.json()
+    // })
     return API.get('testApiCall', _path)
   }
 
